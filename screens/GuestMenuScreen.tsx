@@ -1,64 +1,118 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { MenuContext } from '../context/MenuContext';
 import { Ionicons } from '@expo/vector-icons';
 
+// This helps us use navigation between screens
 type Props = NativeStackScreenProps<RootStackParamList, 'GuestMenu'>;
 
 export default function GuestMenuScreen({ navigation }: Props) {
+  // Get the current menu that the chef made
   const { currentMenu } = useContext(MenuContext);
+
+  // Group the menu items into Starters, Mains, and Desserts
+  const grouped = ['Starter', 'Main', 'Dessert']
+    .map(course => ({
+      title: course,
+      data: currentMenu.filter(dish => dish.course === course),
+    }))
+    .filter(group => group.data.length > 0); // only show courses that have items
 
   return (
     <View style={styles.root}>
-      <Text style={styles.heading}>MENU</Text>
+      <Text style={styles.heading}>Guest Menu</Text>
 
-      <TouchableOpacity style={styles.filterBtn} onPress={() => navigation.navigate('GuestFilter')}>
-        <Text style={styles.filterText}>Filter by course</Text>
-      </TouchableOpacity>
-
-      {currentMenu.length > 0 ? (
+      {/* If there are no dishes yet, show a message */}
+      {grouped.length === 0 ? (
+        <Text style={styles.empty}>No menu available yet.</Text>
+      ) : (
+        // Show all dishes grouped by their course
         <FlatList
-          data={currentMenu}
-          keyExtractor={(item) => item.id}
+          data={grouped}
+          keyExtractor={(item) => item.title}
           renderItem={({ item }) => (
-            <View style={styles.card}>
-              {item.image ? <Image source={item.image} style={styles.image} /> : <View style={styles.imagePlaceholder}><Ionicons name="image-outline" size={28} color="#fff" /></View>}
-              <View style={styles.cardRight}>
-                <Text style={styles.dishName}>{item.name}</Text>
-                <Text style={styles.desc}>{item.description}</Text>
-                <View style={styles.ratingRow}>{[...Array(5)].map((_, i) => <Ionicons key={i} name="star" size={14} color="#E36BAE" />)}</View>
-                <Text style={styles.priceText}>R{item.price}</Text>
-              </View>
+            <View style={styles.section}>
+              <Text style={styles.courseTitle}>{item.title}</Text>
+              {item.data.map(dish => (
+                <View key={dish.id} style={styles.card}>
+                  {/* Dish picture */}
+                  {dish.image && <Image source={dish.image} style={styles.image} />}
+                  <View style={{ flex: 1 }}>
+                     {/* Dish name and description */}
+                    <Text style={styles.name}>{dish.name}</Text>
+                    {dish.description ? <Text style={styles.desc}>{dish.description}</Text> : null}
+
+                    
+                    {isNaN(dish.price) ? null : (
+                      <Text style={styles.price}>R{dish.price.toFixed(2)}</Text>
+                    )}
+                    {/* Show 5 gold stars for each dish */}
+                    <View style={styles.ratingRow}>
+                      {[...Array(5)].map((_, i) => (
+                        <Ionicons key={i} name="star" size={14} color="#FFD700" />
+                      ))}
+                    </View>
+                  </View>
+                </View>
+              ))}
             </View>
           )}
-          contentContainerStyle={{ paddingBottom: 110 }}
+          contentContainerStyle={{ paddingBottom: 100 }}
         />
-      ) : (
-        <Text style={styles.noMealsText}>No meals available yet. Please check back soon!</Text>
       )}
 
-      <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.homeCircle}>
-        <Ionicons name="home-outline" size={22} color="#fff" />
+      {/* Home button at the bottom of the screen */}
+      <TouchableOpacity style={styles.homeBtn} onPress={() => navigation.navigate('Home')}>
+        <Ionicons name="home-outline" size={22} color="#fff" style={{ marginRight: 6 }} />
+        <Text style={styles.homeText}>Return Home</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
+// Styles for this screen
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#F9F9F9', paddingHorizontal: 16, paddingTop: 60 },
-  heading: { fontSize: 28, fontWeight: '900', color: '#000', textAlign: 'center', marginBottom: 16 },
-  filterBtn: { alignSelf: 'center', backgroundColor: '#4ED6E5', paddingHorizontal: 22, paddingVertical: 8, borderRadius: 20, marginBottom: 18 },
-  filterText: { color: '#fff', fontWeight: '700', fontSize: 13 },
-  card: { flexDirection: 'row', backgroundColor: '#C4C4C4', borderRadius: 12, padding: 10, alignItems: 'center', marginBottom: 16 },
-  image: { width: 70, height: 70, borderRadius: 8, marginRight: 12, backgroundColor: '#ddd' },
-  imagePlaceholder: { width: 70, height: 70, borderRadius: 8, backgroundColor: '#9E9E9E', alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-  cardRight: { flex: 1 },
-  dishName: { fontSize: 15, fontWeight: '800', color: '#000', marginBottom: 2 },
-  desc: { color: '#444', fontSize: 12, marginBottom: 4 },
-  ratingRow: { flexDirection: 'row', marginBottom: 2 },
-  priceText: { color: '#000', fontWeight: '700', fontSize: 13, marginTop: 2 },
-  noMealsText: { textAlign: 'center', color: '#777', fontSize: 14, marginTop: 20 },
-  homeCircle: { position: 'absolute', bottom: 24, right: 24, width: 50, height: 50, borderRadius: 25, backgroundColor: '#2E2E2E', alignItems: 'center', justifyContent: 'center', elevation: 5 },
+  root: { flex: 1, backgroundColor: '#E6F9FC', paddingTop: 60, paddingHorizontal: 16 },
+  heading: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: '#000',
+    textAlign: 'center',
+    backgroundColor: '#4ED6E5',
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  empty: { textAlign: 'center', color: '#555', marginTop: 20 },
+  section: { marginBottom: 20 },
+  courseTitle: { fontSize: 18, fontWeight: '800', color: '#4ED6E5', marginBottom: 8 },
+  card: {
+    flexDirection: 'row',
+    backgroundColor: '#C4C4C4',
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  image: { width: 60, height: 60, borderRadius: 8, marginRight: 10 },
+  name: { fontWeight: '800', color: '#000' },
+  desc: { fontSize: 12, color: '#333', marginVertical: 3 },
+  price: { fontSize: 13, fontWeight: '700', color: '#000' },
+  ratingRow: { flexDirection: 'row', marginTop: 4, gap: 2 },
+
+  
+  homeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4ED6E5',
+    paddingVertical: 12,
+    borderRadius: 10,
+    position: 'absolute',
+    bottom: 25,
+    left: 20,
+    right: 20,
+  },
+  homeText: { color: '#fff', fontWeight: 'bold', fontSize: 15 },
 });

@@ -4,13 +4,16 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
+// This helps us use navigation so we can move between screens
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: Props) {
   return (
+    // SafeAreaView keeps the content away from notches on phones
     <SafeAreaView style={styles.root}>
       <View style={styles.container}>
         
+        {/*Picture of logo*/}
         <Image
           source={require('../assets/logo.png')} 
           style={styles.logo}
@@ -22,7 +25,7 @@ export default function HomeScreen({ navigation }: Props) {
           EXCEPTIONAL CULINARY{'\n'}experiences tailored to YOUR PREFERENCE
         </Text>
 
-        
+          {/* Button for guests to view the menu */}
         <TouchableOpacity
           style={[styles.btn]}
           onPress={() => navigation.navigate('GuestMenu')}
@@ -31,6 +34,7 @@ export default function HomeScreen({ navigation }: Props) {
           <Text style={styles.btnText}>VIEW MENU</Text>
         </TouchableOpacity>
 
+         {/* Button for chefs to go to login */}
         <TouchableOpacity
           style={[styles.btn]}
           onPress={() => navigation.navigate('Login')}
@@ -43,6 +47,7 @@ export default function HomeScreen({ navigation }: Props) {
   );
 }
 
+// These are all the styles for the home screen
 const styles = StyleSheet.create({
   root: {
     flex: 1,

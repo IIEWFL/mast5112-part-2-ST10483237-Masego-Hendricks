@@ -18,10 +18,12 @@ export type RootStackParamList = {
   DishSelection: { course: string };
 };
 
+// This creates the main stack navigator (used to move between screens)
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (
+    // This makes sure navigation works across the whole app
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />

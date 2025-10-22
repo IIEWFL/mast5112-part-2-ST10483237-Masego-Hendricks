@@ -7,9 +7,13 @@ import { Ionicons } from '@expo/vector-icons';
 type Props = NativeStackScreenProps<RootStackParamList, 'GuestFilter'>;
 
 export default function GuestFilterScreen({ navigation }: Props) {
+  // This saves which option the guest has chosen (Starter, Main or Dessert)
   const [selected, setSelected] = useState<string | null>(null);
+   // This function changes the selected option when the user taps on it
   const toggleSelection = (choice: string) => setSelected(prev => (prev === choice ? null : choice));
-  const apply = () => navigation.navigate('GuestMenu', { filter: selected ?? undefined });
+  // When the guest presses the "Apply Filter" button, this sends them to the GuestMenu screen
+  const apply = () => 
+    navigation.navigate('GuestMenu', { filter: selected ?? undefined });
 
   return (
     <View style={styles.root}>
@@ -18,6 +22,8 @@ export default function GuestFilterScreen({ navigation }: Props) {
 
         {['Starter', 'Main', 'Dessert'].map(choice => (
           <TouchableOpacity key={choice} style={styles.optionRow} onPress={() => toggleSelection(choice)}>
+
+            {/* This makes the checkbox look filled when selected */}
             <View style={[styles.checkbox, selected === choice && styles.checkboxSelected]}>
               {selected === choice && <Ionicons name="checkmark" size={16} color="#4ED6E5" />}
             </View>
@@ -26,6 +32,7 @@ export default function GuestFilterScreen({ navigation }: Props) {
         ))}
       </View>
 
+       {/* Button to apply the filter */}
       <TouchableOpacity style={styles.applyBtn} onPress={apply}>
         <Text style={styles.applyText}>Apply Filter</Text>
       </TouchableOpacity>
