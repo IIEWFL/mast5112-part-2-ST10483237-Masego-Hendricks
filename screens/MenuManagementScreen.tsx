@@ -24,10 +24,14 @@ export default function MenuManagementScreen({ navigation }: Props) {
             {item.image && <Image source={item.image} style={styles.image} />}
 
             {/* Dish details on the right side */}
-            <View style={{ flex: 1 }}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>R{item.price}</Text>
+           <View style={{ flex: 1 }}>
+            <Text style={styles.name}>{item.name}</Text>
+            {item.description ? (
+            <Text style={styles.desc}>{item.description}</Text>
+            ) : null}
+            <Text style={styles.price}>R{item.price}</Text>
             </View>
+
 
             {/* Button to remove a dish from the list */}
             <TouchableOpacity onPress={() => removeDishFromMenu(item.id)} style={styles.removeBtn}>
@@ -93,6 +97,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+  desc: {
+  fontSize: 12,
+  color: '#333',
+  marginVertical: 2,
+},
+
   filterBtnSelected: { backgroundColor: '#A8A8A8' },
   filterText: { color: '#fff', fontWeight: '700' },
   doneBtn: { backgroundColor: '#000', paddingVertical: 14, borderRadius: 8, marginTop: 10, marginBottom: 30 },

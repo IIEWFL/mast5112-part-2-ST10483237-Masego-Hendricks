@@ -1,6 +1,5 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
-
 export type Dish = {
   id: string;
   name: string;
@@ -17,7 +16,7 @@ type MenuContextType = {
   isCourseSelected: (course: string) => boolean; // checks if a course already has dishes
 };
 
-//Gives default empty values
+// Gives default empty values (so that the app doesn’t crash before data loads)
 export const MenuContext = createContext<MenuContextType>({
   currentMenu: [],
   addCustomDish: () => {},
@@ -25,7 +24,7 @@ export const MenuContext = createContext<MenuContextType>({
   isCourseSelected: () => false,
 });
 
-// Help match image automatically by keyword
+// Help match images automatically by keyword
 const matchImage = (name: string) => {
   const lower = name.toLowerCase(); // lowercase makes it easier to check for certain stuff
 
@@ -33,42 +32,51 @@ const matchImage = (name: string) => {
   if (lower.includes('spring')) return require('../assets/food/springrolls.jpg');
   if (lower.includes('arancini')) return require('../assets/food/arancini.jpg');
   if (lower.includes('poppers')) return require('../assets/food/poppers.jpg');
-  if (lower.includes('rib')) return require('../assets/food/ribs.jpg');
+  if (lower.includes('ribs')) return require('../assets/food/ribs.jpg');
   if (lower.includes('calamari')) return require('../assets/food/calamari.jpg');
   if (lower.includes('wing')) return require('../assets/food/wings.jpg');
   if (lower.includes('cheese')) return require('../assets/food/cheesecake.jpg');
   if (lower.includes('malva')) return require('../assets/food/malva.jpg');
   if (lower.includes('brownie')) return require('../assets/food/brownie.jpg');
   if (lower.includes('churro')) return require('../assets/food/churros.jpg');
-  if (lower.includes('beef')) return require('../assets/food/ribeye.jpg');
+  if (lower.includes('rib-eye')) return require('../assets/food/ribeye.jpg');
 
-  // default fallback, incase no match is found
+  // default fallback, in case no match is found
   return require('../assets/food/default.jpg');
 };
 
 export const MenuProvider = ({ children }: { children: ReactNode }) => {
-   // This stores all the dishes that the chef has added
+  // This stores all the dishes that the chef has added
   const [currentMenu, setCurrentMenu] = useState<Dish[]>([]);
 
   // Function to add a new dish
   const addCustomDish = (course: string, name: string, description: string, price: number) => {
+    // Make sure the course name always matches exactly how it’s grouped in GuestMenu
+    const properCourse =
+      course.toLowerCase() === 'starter' ? 'Starter' :
+      course.toLowerCase() === 'main' ? 'Main' :
+      course.toLowerCase() === 'dessert' ? 'Dessert' :
+      course;
+
     const newDish: Dish = {
       id: Math.random().toString(),
       name,
       description,
-      course,
+      course: properCourse, 
       price,
       image: matchImage(name),
     };
+
     // Add the new dish to the list
     setCurrentMenu((prev) => [...prev, newDish]);
   };
 
-   // This checks if a course already has any dishes added
+  // This removes a dish from the menu
   const removeDishFromMenu = (dishId: string) => {
     setCurrentMenu((prev) => prev.filter((i) => i.id !== dishId));
   };
 
+  // This checks if a course already has any dishes added
   const isCourseSelected = (course: string) => {
     return currentMenu.some((item) => item.course === course);
   };

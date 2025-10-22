@@ -4,6 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
+
 // This helps us use navigation so we can move between screens
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
