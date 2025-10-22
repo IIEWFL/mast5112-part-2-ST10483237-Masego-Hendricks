@@ -2,7 +2,7 @@
 
 <strong>Link to github repository:<strong> https://github.com/IIEWFL/mast5112-part-2-ST10483237-Masego-Hendricks.git
 
-<strong>Link to youtube video:<strong>
+<strong>Link to youtube video:<strong> https://youtu.be/P-jsgALRL1o
 
 <strong>Purpose of the app:<strong>
 
