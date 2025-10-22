@@ -1,15 +1,19 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/cBRPQS2M)
 
-<strong>Link to github repository:<strong> https://github.com/IIEWFL/mast5112-part-2-ST10483237-Masego-Hendricks.git
+<strong>Link to github repository:</strong> https://github.com/IIEWFL/mast5112-part-2-ST10483237-Masego-Hendricks.git
 
 <strong>Link to youtube video:</strong> https://youtu.be/P-jsgALRL1o
 
 <strong>Purpose of the app:</strong>
+
+
 Christoffels Menu App allows the chef to create and manage a digital restaurant menu.
 The chef can log in, add dishes for each course (Starters, Mains, Desserts), and save them to the menu.
 Guests can then view the chef’s selected dishes, filter them by course, and see dish details like name, description, price, and rating — all in a clean, easy-to-use interface.
 
 <strong>Changes implemented from Part 1 feedback:</strong>
+
+
 I changed the colors of the user interface so that the app can have a more consistent look and feel.
 The Guest screen has a cyan and grey theme, while the Chef screens have a pink and grey theme.The colors differ to distinguish user roles, the use of the grey color as a shared color helps maintain visual consistency across the app. This ensures that both screens feel like the same design while still giving each user type a distinct identity.
 
